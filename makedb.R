@@ -20,3 +20,6 @@ P_ZipCodes_2010(d)
 
 # Import metro areas delineations, 2013
 C_MetroDelineations_2013(d)
+
+# Merge Zip data with metro data
+A_ZipCBSA_2010(d)
