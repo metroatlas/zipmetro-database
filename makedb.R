@@ -13,7 +13,7 @@ sourceAll()
 
 # Set TRUE if you want to redownload the data
 # This can be set for each function
-d  <-  TRUE
+d  <-  FALSE
 
 # Create the ZipCodes database
 P_ZipCodes_2010(d)

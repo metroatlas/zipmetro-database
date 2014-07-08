@@ -27,8 +27,18 @@ A_ZipCBSA_2010 <- function(d = TRUE) {
   zips <- dbReadTable(con, "P_ZipCodes_2010")
   dbDisconnect(con)
   
-  zips <- zips[, c(1,6,7)]
-  colnames(zips) <- c("zip","stusab","countyname")
+  zips <- zips[, c(1,3,4,6,7)]
+  colnames(zips) <- c("zip","primary_city","acceptable_cities","stusab","countyname")
+  
+  allCities <- function(x,y) {
+    if(y == ""){
+      return(x)
+    } else {
+      return(paste(x, y, sep = ", "))
+    }
+  }
+  
+  zips$allCities <- mapply(FUN = allCities, zips$primary_city, zips$acceptable_cities)
   
   #Format county names
   removeCounty <- function(x){
@@ -45,7 +55,7 @@ A_ZipCBSA_2010 <- function(d = TRUE) {
   zips$countyname <- sapply(zips$countyname, removeCounty)
   
   # Merge with states to get state fips
-  zips <- merge(zips, states, by = "stusab")[,1:5]
+  zips <- merge(zips, states, by = "stusab")[,1:8]
   
   # Format county names in delineation file
   delin$countyname <- sapply(delin$CountyCountyEquivalent, removeCounty)
@@ -58,6 +68,9 @@ A_ZipCBSA_2010 <- function(d = TRUE) {
                "StateName",
                "countynamefull",
                "countyname",
+               "primary_city",
+               "acceptable_cities",
+               "allCities",
                "CBSACode",
                "CBSATitle",
                "Type",
