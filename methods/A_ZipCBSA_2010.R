@@ -68,6 +68,25 @@ A_ZipCBSA_2010 <- function(d = TRUE) {
   )
   zips <- zips[,to.keep]
   
+  # Make PSA
+  # Primary Statistical Area is the highest level of a metro area, wither the CSA or the CBSA for
+  # metro areas that are not part of a CSA.
+  # See http://en.wikipedia.org/wiki/List_of_primary_statistical_areas_of_the_United_States
+  
+  getPSA <- function(row) {
+    r = data.frame()
+    if(is.na(row['CSACode'])) {
+      r = data.frame(row['CBSACode'], row['CBSATitle'], row['CBSACentralCity'])
+    } else {
+      r = data.frame(row['CSACode'], row['CSATitle'], row['CSACentralCity'])
+    }
+    colnames(r) <- c("PSACode","PSATitle","PSACentralCity")
+    return(r)
+  }
+  
+  PSA <- do.call(rbind, apply(zips, 1, getPSA))
+  zips <- cbind(zips, PSA)
+  
   # Write table
   con <- conma()
   dbWriteTable(con, name="A_ZipCBSA_2010", value=zips, overwrite=TRUE)
