@@ -12,7 +12,6 @@ A_ZipCBSA_2010 <- function(d = TRUE) {
     write(dateDownloaded,file="data/state-fips.csv.csv.date.txt")
   }
 
-  
   # Import state FIPS
   states <- read.csv("data/state-fips.csv",
                      sep="|", header = TRUE,
@@ -55,10 +54,11 @@ A_ZipCBSA_2010 <- function(d = TRUE) {
   zips$countyname <- sapply(zips$countyname, removeCounty)
   
   # Merge with states to get state fips
-  zips <- merge(zips, states, by = "stusab")[,1:8]
+  zips <- merge(zips, states, by = "stusab")[,1:9]
   
   # Format county names in delineation file
   delin$countyname <- sapply(delin$CountyCountyEquivalent, removeCounty)
+  delin$StateName <- NULL
   
   # Merge zips with CBSA delineation file
   zips <- merge(zips, delin, by = c("FIPSStateCode", "countyname"), all.x = TRUE)
