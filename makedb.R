@@ -18,6 +18,9 @@ d  <-  FALSE
 # Create the ZipCodes database
 P_ZipCodes_2010(d)
 
+# Import state codes
+P_StatesAbbr_2010(d)
+
 # Import metro areas delineations, 2013
 C_MetroDelineations_2013(d)
 
