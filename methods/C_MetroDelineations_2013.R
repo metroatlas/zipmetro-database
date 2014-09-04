@@ -33,10 +33,12 @@ C_MetroDelineations_2013 <- function(d = TRUE){
   
   # CBSACentralCity
   firstElement <- function(x){x[1]}
-  md$CBSACentralCity <- sapply(strsplit(md$CBSATitle,"[-,]"), firstElement)
+  md$CBSACentralCities <- sapply(strsplit(md$CBSATitle,"[,]"), firstElement)
+  md$CBSACentralCity <- sapply(strsplit(md$CBSACentralCities,"[-]"), firstElement)
   
   # CSACentralCity
-  md$CSACentralCity <- sapply(strsplit(md$CSATitle,"[-,]"), firstElement)
+  md$CSACentralCities <- sapply(strsplit(md$CSATitle,"[,]"), firstElement)
+  md$CSACentralCity <- sapply(strsplit(md$CSACentralCities,"[-]"), firstElement)
   
   # Write table
   con <- conma()
