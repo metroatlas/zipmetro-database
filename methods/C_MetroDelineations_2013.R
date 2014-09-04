@@ -16,6 +16,12 @@ C_MetroDelineations_2013 <- function(d = TRUE){
                   colClasses="character",
                   header=TRUE)
   
+  # Get table of state abbreviations
+  con <- conma()
+  states <- dbReadTable(con, "P_StatesAbbr_2010")
+  dbDisconnect(con)
+  states$StateName <- as.character(states$StateName)
+  
   # Transform names
   names(md) <- gsub("\\.","",names(md))
   md[c(1:4,6:11)]  <- lapply(md[c(1:4,6:11)], as.character)
@@ -31,14 +37,44 @@ C_MetroDelineations_2013 <- function(d = TRUE){
   md$CentralCounty  <- as.integer(md$CentralOutlyingCounty) - 1
   md$CentralCounty  <- as.integer(md$CentralCounty) - 1
   
-  # CBSACentralCity
+  
+  # Methods for first and last elements of a list
   firstElement <- function(x){x[1]}
+  lastElement <- function(x) {
+      return(tail(x, n = 1))
+  }
+  
+  # CBSACentralCity
   md$CBSACentralCities <- sapply(strsplit(md$CBSATitle,"[,]"), firstElement)
   md$CBSACentralCity <- sapply(strsplit(md$CBSACentralCities,"[-]"), firstElement)
   
   # CSACentralCity
   md$CSACentralCities <- sapply(strsplit(md$CSATitle,"[,]"), firstElement)
   md$CSACentralCity <- sapply(strsplit(md$CSACentralCities,"[-]"), firstElement)
+  
+  #State names from abbreviations
+  getStateName <- function(abr) {
+    return(states[states$StateAbbr == abr,]['StateName'])
+  }
+  
+  getStateNames  <- function(abrs) {
+      if(!is.na(abrs)) {
+        abrv  <- unlist(strsplit(abrs, "[-]")[1])
+        stnv  <- unlist(sapply(abrv, getStateName))
+        ststr <- paste(stnv, collapse = ',')
+        return(ststr)
+      } else {
+        return(NA)
+      }
+  }
+  
+  # CBSAStates
+  md$CBSAStates <- sapply(strsplit(md$CBSATitle, ", "), lastElement)
+  md$CBSAStates <- sapply(md$CBSAStates, getStateNames)
+  
+  # CSAStates
+  md$CSAStates <- sapply(strsplit(md$CSATitle, ", "), lastElement)
+  md$CSAStates <- sapply(md$CSAStates, getStateNames)
   
   # Write table
   con <- conma()

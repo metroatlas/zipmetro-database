@@ -89,11 +89,11 @@ A_ZipCBSA_2010 <- function(d = TRUE) {
   getPSA <- function(row) {
     r = data.frame()
     if(is.na(row['CSACode'])) {
-      r = data.frame(row['CBSACode'], row['CBSATitle'], row['CBSACentralCity'], row['CBSACentralCities'])
+      r = data.frame(row['CBSACode'], row['CBSATitle'], row['CBSACentralCity'], row['CBSACentralCities'], row['CBSAStates'])
     } else {
-      r = data.frame(row['CSACode'], row['CSATitle'], row['CSACentralCity'], row['CSACentralCities'])
+      r = data.frame(row['CSACode'], row['CSATitle'], row['CSACentralCity'], row['CSACentralCities'], row['CSAStates'])
     }
-    colnames(r) <- c("PSACode","PSATitle","PSACentralCity")
+    colnames(r) <- c("PSACode","PSATitle","PSACentralCity", "PSACentralCities", "PSAStates")
     return(r)
   }
   
