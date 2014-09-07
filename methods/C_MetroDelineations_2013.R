@@ -44,13 +44,23 @@ C_MetroDelineations_2013 <- function(d = TRUE){
       return(tail(x, n = 1))
   }
   
+  # Replaces dashes with comma separators
+  dtoc  <- function(x) {
+    y <- unlist(strsplit(x,"-"))
+    z <- paste(y, sep = ',', collapse = ',')
+    return(z)
+  }
+  
   # CBSACentralCity
   md$CBSACentralCities <- sapply(strsplit(md$CBSATitle,"[,]"), firstElement)
-  md$CBSACentralCity <- sapply(strsplit(md$CBSACentralCities,"[-]"), firstElement)
+  md$CBSACentralCities <- sapply(md$CBSACentralCities, dtoc)
+  md$CBSACentralCity <- sapply(strsplit(md$CBSACentralCities,"[,]"), firstElement)
+
   
   # CSACentralCity
   md$CSACentralCities <- sapply(strsplit(md$CSATitle,"[,]"), firstElement)
-  md$CSACentralCity <- sapply(strsplit(md$CSACentralCities,"[-]"), firstElement)
+  md$CSACentralCities <- sapply(md$CSACentralCities, dtoc)
+  md$CSACentralCity <- sapply(strsplit(md$CSACentralCities,"[,]"), firstElement)
   
   #State names from abbreviations
   getStateName <- function(abr) {

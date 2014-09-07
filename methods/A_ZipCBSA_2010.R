@@ -75,9 +75,13 @@ A_ZipCBSA_2010 <- function(d = TRUE) {
                "CBSATitle",
                "Type",
                "CBSACentralCity",
+               "CBSACentralCities",
+               "CBSAStates",
                "CSACode",
                "CSATitle",
-               "CSACentralCity"
+               "CSACentralCity",
+               "CSACentralCities",
+               "CSAStates"
   )
   zips <- zips[,to.keep]
   
