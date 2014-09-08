@@ -86,6 +86,16 @@ C_MetroDelineations_2013 <- function(d = TRUE){
   md$CSAStates <- sapply(strsplit(md$CSATitle, ", "), lastElement)
   md$CSAStates <- sapply(md$CSAStates, getStateNames)
   
+  # Add consolidated counties
+  
+  cons <- read.csv('data/consolidated-counties.csv',
+                   colClasses = 'character')
+  
+  cons$countyConsolidated <- 1
+  cons <- cons[,c(2:3,5)]
+  
+  md <- merge(md, cons, by = c("FIPSStateCode", "FIPSCountyCode"), all.x = TRUE)
+  
   # Write table
   con <- conma()
   dbWriteTable(con, name="C_MetroDelineations_201302", value=md, overwrite=TRUE)

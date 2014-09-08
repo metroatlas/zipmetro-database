@@ -68,6 +68,7 @@ A_ZipCBSA_2010 <- function(d = TRUE) {
                "StateName",
                "countynamefull",
                "countyname",
+               "countyConsolidated",
                "primary_city",
                "acceptable_cities",
                "allCities",
